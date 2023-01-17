@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% block title %} 
+<h1> Vamos a comprar {{ producto.name }}</h1>
+<p>
+{% endblock %}
+
+<form action="" method="post" >
+
+<!-- Campo de Supermercado --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.supermercado.label }}</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.supermercado(class_="form-control-sm") }}
+            </div>
+    </div>
+
+    <!-- Campo de Fecha --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.fecha.label }} Año-Mes-Dia</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.fecha(class_="form-control-sm") }}
+            </div>
+                
+                {% for error in form.fecha.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+        </div>
+    </div>
+
+    <!-- Campo de empaquetado --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.empaquetado.label }} Empaquetado</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.empaquetado(class_="form-control-sm") }}
+            </div>
+                
+                {% for error in form.empaquetado.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- Campo de observaciones --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.observaciones.label }} observaciones</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.observaciones(class_="form-control-sm") }}
+            </div>
+                
+                {% for error in form.observaciones.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+        </div>
+    </div>
+
+    <!-- Campo de precio --!>
+    <div class="form-group ">
+
+    <div class="row">
+
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.precio.label }} </label>
+            </div>
+            <div class="col-10">
+                {{ form.precio(class_="form-control-sm") }}
+            </div>
+
+        {% for error in form.precio.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    <!-- Fin campos --!>
+
+    <hr />
+    {{ form.hidden_tag() }}
+
+    {{ form.submit(class_="btn btn-primary") }}
+
+
+</form>
+
+{% endblock %}

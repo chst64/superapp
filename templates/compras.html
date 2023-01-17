@@ -1,0 +1,53 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Barra de busqueda -->
+<div>
+<form action="" method="POST" accept-charset="utf-8">
+    <label for="name">Nombre:</label>
+    <input type="text" value="" name="name" id="name"/>
+    <input type="submit" value="Buscar" name="signup" id="signup"/>
+</form>
+</div>
+<h2>Compras.html</h2>
+
+        {% for n in datos %}
+            <div class="container-fluid">
+                <div class="row">
+
+                <!-- Foto producto --!>
+                    <div class="col-sm-3 bg-white">
+                            <img src="static/images/{{n.producto_id}}.jpg"> 
+                    </div>
+                    <!-- Precio --!> 
+                     <div class="col-9 bg-white">
+                         <h3 class="font-weight-bold"> {{ n.precio }} € 
+
+                    <!-- fecha --!>
+                        <div class="col-9 bg-white">
+                        <h3 class="font-weight-bold"> {{ n.fecha }}
+
+                         <!-- Logo supermercado --!>
+                             <img src="static/images/{{n.supermercado.nombre}}.svg"
+                             style="height:30px;">
+                         </h3>
+                         <!-- Formateado para 2 decimales --> 
+                         {#<small class="text-secondary">{{ "%.2f"|format(n.precio / n.producto.cantidad|float)}} €/{{ n.unidad }} </small>#}
+                         <small class="text-secondary">{{ n.precio }} - {{ n.producto.cantidad }}</small>
+ 
+
+
+<small class="text-secondary"> {{ n.envase }} </small> 
+                     </div>
+                    </div>
+                </div>
+            </div>
+        <a href="{{ url_for('edit', id=n.id) }}">
+            <span class="badge badge-primary">Editar producto</span>
+        </a>
+        <hr>
+    {% endfor %}
+
+{% endblock %}

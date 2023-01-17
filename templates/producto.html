@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <!-- Nombre del producto y marca -->
+    <p><h2> {{ producto['name'] }} - {{ producto['marca']  }} </h2> </p> 
+
+    <!-- Imagen del producto -->
+    <img src="static/images/{{ producto['id'] }}.jpg" style="width: 20%" />
+
+    <!-- Codigo barras -->
+    <p> Codigo Barras: {{ producto['codigoBarras'] }} </p>
+
+    <!-- Observaciones -->
+    <p> Observaciones: {{ producto['observaciones'] }} </p>
+
+    <!-- Boton editar -->
+        <a href="{{ url_for('edit', id=producto['id']) }}">
+            <span class="badge badge-primary">Editar Producto</span>
+        </a>
+
+    <!-- Boton comprar --!>
+        <a href="{{ url_for('comprar_producto', id=producto['id']) }}">
+            <span class="badge badge-secondary">Comprar</span>
+        </a>
+
+    <!-- Precio -->
+    <p class=h3>Ultimas compras</p>
+    
+    {% for compra in compras %}
+    <h3>{{ compra.fecha }} - {{ compra.precio }}€ <img src="static/images/{{compra.supermercado.nombre}}.svg"
+        style="height:30px;"/> </h3>
+    {% endfor %}
+
+    <!-- Pongo estrellas segun la puntuacion -->
+    {% for n in range(5)  %}
+        {% if n < producto['puntuacion'] %}
+            <span class="fa fa-star"></span>
+        {% else %}
+            <span class="fa fa-star-o"></span>
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock %}

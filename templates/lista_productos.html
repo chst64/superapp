@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Barra de busqueda -->
+<div class="container p-3">
+<form action="" method="POST" accept-charset="utf-8">
+    <label for="name">Nombre:</label>
+    <input type="text" value="" name="name" id="name"/>
+    <input type="submit" value="Buscar" name="signup" id="signup"/>
+</form>
+</div>
+        {% for n in datos %}
+            <div class="container-fluid">
+                <div class="row">
+
+                <!-- Foto producto --!>
+                    <div class="col-sm-3 bg-white">
+                            <img src="static/images/{{n.id}}.jpg" style="width: 50%"> 
+                    </div>
+ 
+                <!-- Nombre producto y tamaño envase-->
+                    <div class="col-9 bg-white">
+                        <a class = "font-weight-bold, h3" href="{{ url_for('producto', producto_id=n.id) }}">{{ n.name }}</a> 
+                        <!-- Marca -->
+                        <div class="col-9 bg-white">
+                            Marca: {{ n.marca }} Cantidad: {{ n.cantidad }} {{ n.unidad }}
+                        </div>
+
+                        <div class="col-9 bg-white">
+                            Codigo Barras: {{ n.codigoBarras }}
+                        </div>
+                    </div>
+                        
+
+
+            <!-- Boton editar --!>
+        <a href="{{ url_for('edit', id=n.id) }}">
+            <span class="badge badge-primary">Editar Producto</span>
+
+            <!-- Boton comprar --!>
+        <a href="{{ url_for('comprar_producto', id=n.id) }}">
+            <span class="badge badge-secondary">Comprar</span>
+
+        </a>
+        
+        <p></p>
+        <p></p>
+    {% endfor %}
+
+{% endblock %}

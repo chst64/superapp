@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% block title %} 
+<h1> Introduce un nuevo producto</h1>
+<p>
+{% endblock %}
+
+<form action="" method="post" >
+<!-- Campo de codigo de Barras --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.codigoBarras.label }}</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.codigoBarras(class_="form-control-sm") }}
+            </div>
+                
+                {% for error in form.codigoBarras.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Cambo de Name --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label"{{ form.name.label }}</label> 
+            </div>
+
+            <div class="col-10">
+                {{ form.name(class_="form-control-sm") }}
+            </div>
+                
+                {% for error in form.name.errors %}
+                <span style="color:red">{{ error }}</span>
+                {% endfor %}
+        </div>
+    </div>
+
+    <!-- Campo de Marca --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label" {{ form.marca.label }} </label>
+            </div>
+
+            <div class="col-10">
+                {{ form.marca(class_="form-control-sm") }}
+            </div>
+
+            {% for error in form.marca.errors %}
+
+            <span style="color:red">{{ error }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Campo de envase --!>
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label class="col-sm col-form-label" {{ form.envase.label }} </label>
+            </div>
+
+            <div class="col-10">
+                {{ form.envase(class_="form-control-sm") }}
+            </div>
+
+            {% for error in form.envase.errors %}
+
+            <span style="color:red">{{ error }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Campo de cantidad --!>
+    <div class="form-group">
+    <div class="row">
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.cantidad.label }} </label>
+        </div>
+
+        <div class="col-10">
+            {{ form.cantidad(class_="form-control-sm") }}
+        </div>
+
+        {% for error in form.cantidad.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    <!-- Campo de categoria --!>
+    <div class="form-group ">
+
+    <div class="row">
+
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.categoria.label }} </label>
+        </div>
+
+        <div class="col-10">
+            {{ form.categoria(class_="form-control-sm") }}
+        </div>
+
+        {% for error in form.categoria.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    <!-- Campo de unidad --!>
+    <div class="form-group ">
+
+    <div class="row">
+
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.unidad.label }} </label>
+            </div>
+            <div class="col-10">
+                {{ form.unidad(class_="form-control-sm") }}
+            </div>
+
+        {% for error in form.unidad.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    <!-- Campo de puntuacion --!>
+    <div class="form-group ">
+
+    <div class="row">
+
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.puntuacion.label }} </label>
+            </div>
+            <div class="col-10">
+                {{ form.puntuacion(class_="form-control-sm") }}
+            </div>
+
+        {% for error in form.puntuacion.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </div>
+    </div>
+
+    
+    <!-- Campo de observaciones --!>
+    <div class="form-group ">
+
+    <div class="row">
+
+        <div class="col">
+            <label class="col-sm col-form-label" {{ form.observaciones.label }} </label>
+            </div>
+            <div class="col-10">
+                {{ form.observaciones(class_="form-control-sm") }}
+            </div>
+
+    </div>
+    </div>
+
+    <!-- Fin campos --!>
+
+    <hr />
+    {{ form.hidden_tag() }}
+
+    {{ form.submit(class_="btn btn-primary") }}
+
+
+</form>
+
+{% endblock %}

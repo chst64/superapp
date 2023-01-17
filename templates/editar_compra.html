@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Compra de {{ compra.producto.name }} en 
+    {{ compra.supermercado.nombre }} por {{ compra.precio }}€ {% endblock %}</h1>
+
+<form method="post">
+
+<!-- Nombre supermercado --!>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm col-form-label ml-2"> {{ form.supermercado.label }} </label>
+        </div>
+        
+        <div class="col-10">
+            {{ form.supermercado(class_="form-control-sm") }}
+        </div>
+    </div>
+
+<!-- Nombre Precio --!>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm col-form-label ml-2"> {{ form.precio.label }} </label>
+        </div>
+
+        <div class="col-10">
+            {{ form.precio(class_="form-control-sm") }}
+        </div>
+    </div>
+
+
+<!-- Nombre Fecha --!>
+    <div class="form-group">
+        <div class="row">
+        <label class="col-sm col-form-label ml-2"> {{ form.fecha.label }} </label>
+        </div>
+
+    <div class="col-10">
+        {{ form.fecha(class_="form-control-sm") }}
+    </div>
+
+<!-- Nombre Empaquetado --!>
+    <div class="form-group">
+        <label for="empaquetado">empaquetado</label>
+        <input type="text" name="empaquetado" placeholder="Post empaquetado"
+                  class="form-control"
+                  value="{{ request.form['empaquetado'] or compra['empaquetado'] }}">
+    </div>
+
+<!-- Nombre Observaciones --!>
+    <div class="form-group">
+        <label for="observaciones">observaciones</label>
+        <input type="text" name="observaciones" placeholder="Post observaciones"
+                  class="form-control"
+                  value="{{ request.form['observaciones'] or compra['observaciones'] }}">
+    </div>
+
+    <!-- Fin Campos --!>
+        <hr>
+
+<!-- Boton actualizar -->
+        {{ form.hidden_tag() }}
+        {{ form.submit(class_="btn btn-primary") }}
+
+</form>
+
+{% endblock %}

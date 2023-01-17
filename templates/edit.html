@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} {{ producto['name'] }} {% endblock %}</h1>
+
+<form method="post">
+
+<!-- Nombre codigo barras --!>
+    <div class="form-group">
+        <label for="name">Codigo Barras</label>
+        <input type="text" name="codigoBarras" placeholder="Codigo de Barras"
+               class="form-control"
+               value="{{ request.form['codigoBarras'] or producto['codigoBarras'] }}">
+        </input>
+    </div>
+
+<!-- Nombre producto --!>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" placeholder="Post name"
+               class="form-control"
+               value="{{ request.form['name'] or producto['name'] }}">
+        </input>
+    </div>
+
+<!-- Nombre marca --!>
+    <div class="form-group">
+        <label for="name">marca</label>
+        <input type="text" name="marca" placeholder="Marca del producto"
+               class="form-control"
+               value="{{ request.form['marca'] or producto['marca'] }}">
+        </input>
+    </div>
+    
+    {#
+<!-- Nombre supermercado --!>
+    <div class="form-group">
+        <label for="name">Supermercado</label>
+        <input type="text" name="supermercado" placeholder="Super del producto"
+               class="form-control"
+               value="{{ request.form['supermercado'] or producto['supermercado'] }}">
+        </input>
+    </div>
+    #}
+
+<!-- Nombre envase --!>
+    <div class="form-group">
+        <label for="name">envase</label>
+        <input type="text" name="envase" placeholder="Envase"
+               class="form-control"
+               value="{{ request.form['envase'] or producto['envase'] }}">
+        </input>
+    </div>
+
+<!-- Nombre cantidad --!>
+    <div class="form-group">
+        <label for="name">cantidad</label>
+        <input type="text" name="cantidad" placeholder="cantidad"
+               class="form-control"
+               value="{{ request.form['cantidad'] or producto['cantidad'] }}">
+        </input>
+    </div>
+
+<!-- Nombre unidad --!>
+    <div class="form-group">
+        <label for="name">unidad</label>
+        <input type="text" name="unidad" placeholder="unidad"
+               class="form-control"
+               value="{{ request.form['unidad'] or producto['unidad'] }}">
+        </input>
+    </div>
+
+    {#    
+<!-- Nombre Precio --!>
+    <div class="form-group">
+        <label for="Precio">Precio</label>
+        <input type="text" name="precio" placeholder="Post precio"
+                  class="form-control"
+                  value="{{ request.form['precio'] or producto['precio'] }}">
+    </div>
+    #}
+
+<!-- Nombre Puntuacion --!>
+    <div class="form-group">
+        <label for="puntuacion">puntuacion</label>
+        <input type="text" name="puntuacion" placeholder="Post puntuacion"
+                  class="form-control"
+                  value="{{ request.form['puntuacion'] or producto['puntuacion'] }}">
+    </div>
+
+
+<!-- Nombre Observaciones --!>
+    <div class="form-group">
+        <label for="observaciones">observaciones</label>
+        <input type="text" name="observaciones" placeholder="Post observaciones"
+                  class="form-control"
+                  value="{{ request.form['observaciones'] or producto['observaciones'] }}">
+    </div>
+<!-- Boton -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </div>
+</form>
+<hr>
+<form action="{{ url_for('delete', id=producto['id']) }}" method="POST">
+    <input type="submit" value="Borrar producto"
+                         class="btn btn-danger btn-sm"
+                         onclick="return confirm('Are you sure you want to
+                         delete this post?')">
+</form>
+{% endblock %}

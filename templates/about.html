@@ -1,0 +1,84 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="rojo">Estoy en la pagina About</h1>
+<hr>
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" sytle="height:10px; width:auto" src="./static/images/{{dato[0].id}}.jpg" alt="">
+    <div class="card-body bg-light">
+        <h4 class="card-title">{{ compra[0].precio }}€</h4>
+    
+        <p class="card-text">{{compra[0].producto.marca}} {{compra[0].supermercado.nombre}}</p>
+        <h5 class="card-text text-primary"><b>{{ compra[0].producto.name }}</b></h5>
+    </div>
+        
+</div>
+
+<hr>
+<p> Id producto : {{ compra[0].id }} </p>
+<p> Name producto: {{ compra[0].producto.name }} </p>
+<p> Marca producto: {{ compra[0].producto.marca }} </p>
+<p> Supermercado producto: {{ compra[0].supermercado.nombre }} </p>
+<p> Precio producto: {{ compra[0].precio }} </p>
+<h1>Formulario</h1>
+<form action="" method="POST" accept-charset="utf-8">
+    <label for="name">Nombre:</label>
+    <input type="text" value="" name="name" id="name"/>
+    <input type="submit" value="Registrar" name="signup" id="signup"/>
+</form>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+           Columna1
+        </div>
+        <div class="col-6">
+           Columna2
+        </div>
+        <div class="col-3">
+            <div class="text-center bg-success text-white border-top border-primary">Columna3</div>
+        </div>
+    </div>
+</div>
+
+<!-- Añadir un texto de alerta que se pueda cerrar -->
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    Lorem Ipsum
+    <button class="close" type="button" data-dismiss="alert" aria-label="Cerrar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- Insignias o badges -->
+<span class="badge badge-pill badge-primary">Etqueta</span>
+
+<!-- Ventana modal -->
+    <!-- Boton para abrir el pop-up -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#popup">
+        Abrir pop-up
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="popupLabel">Titulo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Contenido del pop-up
+                </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+                    
+
+{% endblock %}
