@@ -38,7 +38,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY']='abcde'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basedatos.db'
 DB_FILE = "./basedatos.db"
-
+supermercado_defecto = 2
 db = SQLAlchemy(app)
 
 
@@ -303,7 +303,9 @@ def editar_compra(id):
 
     # Relleno la lista desplegable con los supermercados de la base de datos
 
-    form.supermercado.choices=[(g.id,g.nombre) for g in Supermercado.query.order_by('nombre')]
+    #form.supermercado.choices=[(g.id,g.nombre) for g in Supermercado.query.order_by('nombre')]
+    for g in Supermercado.query.order_by('nombre'):
+        form.supermercado.choices=[(g.id,g.nombre)]
 
     if form.validate_on_submit():
         fecha = request.form['fecha']
@@ -337,6 +339,9 @@ def comprar_producto(id):
     form = Compra_Form()
     # Relleno la lista desplegable con los supermercados de la base de datos
     form.supermercado.choices=[(g.id,g.nombre) for g in Supermercado.query.order_by('nombre')]
+    # Como opcion predeterminada ponemos un supermercado por defecto
+    form.supermercado.default = supermercado_defecto
+    form.process()
 
     if form.validate_on_submit():
         print("Estoy en comprar_producto - form.validate_on_submit")
@@ -347,6 +352,10 @@ def comprar_producto(id):
         precio = request.form['precio']
         print(f"Del formulario tengo {supermercado},{fecha} y {precio}")
         print(f"La fecha que has puesto es {fecha}")
+
+        if supermercado != supermercado_defecto:
+            supermercado_defecto=supermercado
+            print(">>>>>>>>>>>>>>>> Cambiado supermercado por defecto a ",supermercado)
 
         # Separo la fecha tipo "2021-12-01" en año,mes y dia
         año,mes,dia = fecha.split("-")
