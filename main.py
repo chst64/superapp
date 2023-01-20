@@ -24,7 +24,7 @@ V3: Modificada para tener bbdd de productos, de compras, ...
 - Que hagas una lista de compra virtual y te diga los productos que han subido de precio y los que han bajado. Por ejemplo para saber si las ofertas del 3x2 del Carrefour son reales o te estan timando
 """
 
-from datetime import date
+from datetime import date,datetime
 from flask import Flask, render_template, request, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
@@ -32,11 +32,15 @@ from wtforms import Form, StringField, IntegerField, DecimalField, SelectField,S
 from wtforms.validators import DataRequired, Email, Length
 from werkzeug.exceptions import abort
 
+import herramientas
+
 app = Flask(__name__)
 app.config['SECRET_KEY']='abcde'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basedatos.db'
+DB_FILE = "./basedatos.db"
 
 db = SQLAlchemy(app)
+
 
 def get_producto(producto_id):
     
@@ -74,7 +78,9 @@ class Producto_Form(FlaskForm):
 class Compra_Form(FlaskForm):
     #supermercado = StringField("Supermercado")
     supermercado = SelectField("Supermercado", coerce=int)
-    fecha = DateField("Fecha compra", format='%Y-%m-%d')
+    fecha = DateField("Fecha compra",
+                      format='%Y-%m-%d',
+                      default = datetime.today())
     empaquetado = StringField("Empaquetado")
     observaciones = StringField("Observaciones")
     precio = DecimalField("Precio")
@@ -186,7 +192,8 @@ def compras():
 @app.route('/<int:producto_id>')
 def producto(producto_id):
     producto = get_producto(producto_id)
-    compras = db.session.query(Compra).filter_by(producto_id = producto.id).all()
+    if producto!=None:
+        compras = db.session.query(Compra).filter_by(producto_id = producto.id).all()
 
     return render_template('producto.html',producto=producto, compras=compras)
 
