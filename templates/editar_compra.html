@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Compra de {{ compra.producto.name }} en 
-    {{ compra.supermercado.nombre }} por {{ compra.precio }}€ {% endblock %}</h1>
+<h1>
+  {% block title %} Compra de {{ compra["producto"] }} en 
+  {{ compra["supermercado"] }} por {{ compra["precio"] }}€ el {{ compra["fecha"] }}
+</h1>
+{% endblock %}
 
 <form method="post">
 
@@ -24,10 +27,12 @@
         </div>
 
         <div class="col-10">
-            {{ form.precio(class_="form-control-sm") }}
+        <input type="text" name="precio" placeholder= {{ compra["precio"] }} >
+
+            <!-- {{ form.precio(class_="form-control-sm") }} -->
+
         </div>
     </div>
-
 
 <!-- Nombre Fecha --!>
     <div class="form-group">

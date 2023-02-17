@@ -34,6 +34,26 @@ CREATE TABLE compra (
 	FOREIGN KEY(producto_id) REFERENCES producto (id), 
 	FOREIGN KEY(supermercado_id) REFERENCES supermercado (id)
 );
+
+
+DROP VIEW "main"."vista_compra";
+CREATE VIEW "vista_compra" 
+as select 
+compra.id,
+compra.fecha,
+compra.producto_id,
+producto.name as producto,
+producto.codigoBarras,
+supermercado.nombre as supermercado,
+compra.precio,
+producto.cantidad,
+producto.unidad
+
+from compra
+inner join producto on producto.id = compra.producto_id
+inner join supermercado on supermercado.id = compra.supermercado_id
+
+
 INSERT INTO compra VALUES(1,1,2,'1/2/21',21.5);
 INSERT INTO compra VALUES(2,2,1,'2021-08-07',123.0);
 INSERT INTO compra VALUES(3,3,1,'2021-08-07',2.75);

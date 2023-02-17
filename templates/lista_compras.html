@@ -18,30 +18,30 @@
 
                 <!-- Foto producto --!>
                     <div class="col-sm-3 bg-white">
-                            <img src="static/images/{{n.producto_id}}.jpg" style="width: 50%">
+                            <img src="static/images/{{n['producto_id']}}.jpg" style="width: 50%">
                     </div>
                     <!-- Nombre producto --!>
                         <div class="col-9 bg-white">
-                        {{ n.producto.name }}
+                        <h3 class="font-weight-bold"> {{ n['producto'] }}
                         
 
                         </div>
                     <!-- Precio --!> 
                      <div class="col-9 bg-white">
-                         <h3 class="font-weight-bold"> {{ n.precio }} € 
+                         <h3 class="font-weight-bold"> {{ n['precio'] }} € 
 
                     <!-- fecha --!>
                         <div class="col-9 bg-white">
-                        <h5 class="font-weight-bold"> {{ n.fecha }}
+                        <h5 class="font-weight-bold"> {{ n['fecha'] }}
 
                          <!-- Logo supermercado --!>
-                             <img src="static/images/{{n.supermercado.nombre}}.svg"
+                             <img src="static/images/{{n['supermercado']}}.svg"
                              style="height:30px;">
                          </h3>
                          <!-- Formateado para 2 decimales --> 
-                         <small class="text-secondary">{{ "%.2f"|format(n.precio  /  n.producto.cantidad|float) }} €/{{n.producto.unidad}}</small>
+                         <!-- <small class="text-secondary">{{ "%.2f"|format(n['precio']  /  n['cantidad']) }} €/{{n['unidad']}}</small>
+                         -->
 
-<small class="text-secondary"> {{ n.envase }} </small> 
                      </div>
                     </div>
                 </div>

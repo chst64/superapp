@@ -22,7 +22,7 @@
  
                 <!-- Nombre producto y tamaño envase-->
                     <div class="col-9 bg-white">
-                        <a class = "font-weight-bold, h3" href="{{ url_for('producto', producto_id=n.id) }}">{{ n.name }}</a> 
+                        <a class = "font-weight-bold, h3" href="{{ url_for('producto', producto_id=n["id"]) }}">{{ n.name }}</a> 
                         <!-- Marca -->
                         <div class="col-9 bg-white">
                             Marca: {{ n.marca }} Cantidad: {{ n.cantidad }} {{ n.unidad }}
