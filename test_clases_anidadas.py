@@ -69,21 +69,38 @@ with tool.basedatos(bbdd_file) as bbdd:
     
 
 # *** Actualiza compra ***
-    print("==== Actualiza compra ====")
+    #print("==== Actualiza compra ====")
 
-    id = 157 
-    producto_id = 153
-    fecha = date(2023, 2, 17)
-    fecha_formateada = f"{fecha.year}-{fecha.month}-{fecha.day}" 
-    supermercado_id = 1
-    precio = 49 
-
-
-    print(">>> Fecha_formateada",fecha_formateada)
-    datos_columnas=("producto_id","supermercado_id","fecha_formateada","precio")
-    datos=(producto_id,supermercado_id,fecha_formateada,precio)
-
-    bbdd.tbl_compra.actualiza_fila(id,datos_columnas,datos)
-    bbdd.conn.commit()
+    #id = 157 
+    #producto_id = 153
+    #fecha = date(2023, 2, 17)
+    #fecha_formateada = f"{fecha.year}-{fecha.month}-{fecha.day}" 
+    #supermercado_id = 1
+    #precio = 49 
 
 
+    #print(">>> Fecha_formateada",fecha_formateada)
+    #datos_columnas=("producto_id","supermercado_id","fecha_formateada","precio")
+    #datos=(producto_id,supermercado_id,fecha_formateada,precio)
+
+    #bbdd.tbl_compra.actualiza_fila(id,datos_columnas,datos)
+    #bbdd.conn.commit()
+
+# *** Devuelve productos con su precio
+
+    todos_productos = bbdd.tbl_producto.saca_todo()
+
+    for prod in todos_productos:
+        ultimo_precio = 0
+        dato = bbdd.tbl_compra.get_producto(prod["id"],"id")
+        if dato:
+            ultimo_precio = dato[-1]["precio"]
+
+        prod.update({"precio":ultimo_precio})
+        print(f"""
+        id: {prod["id"]}
+        codigoBarras: {prod["codigoBarras"]}
+        name: {prod["name"]}
+        marca: {prod["marca"]}
+        precio: {prod["precio"]}
+        """)

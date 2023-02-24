@@ -32,7 +32,8 @@ background-size: 100% 1.2em;
 }
 
 .fondo_foto {
-    background:url('../../static/images/fondo.jpg');
+    /*background:url('../../static/images/fondo.jpg');*/
+  background: red;
 }
 
 
@@ -41,3 +42,6 @@ background-size: 100% 1.2em;
     font-weight: bold;
 }
 
+.mi_imagen {
+  padding:5px;
+}

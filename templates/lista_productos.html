@@ -5,48 +5,36 @@
 
 <!-- Barra de busqueda -->
 <div class="container p-3">
-<form action="" method="POST" accept-charset="utf-8">
-    <label for="name">Nombre:</label>
-    <input type="text" value="" name="name" id="name"/>
-    <input type="submit" value="Buscar" name="signup" id="signup"/>
-</form>
+  <form action="" method="POST" accept-charset="utf-8">
+      <label for="name">Nombre:</label>
+      <input type="text" value="" name="name" id="name"/>
+      <input type="submit" value="Buscar" name="signup" id="signup"/>
+  </form>
 </div>
+<div class="row text-center">
+
+  
         {% for n in datos %}
-            <div class="container-fluid">
-                <div class="row">
 
-                <!-- Foto producto --!>
-                    <div class="col-sm-3 bg-white">
-                            <img src="static/images/{{n.id}}.jpg" style="width: 50%"> 
-                    </div>
- 
-                <!-- Nombre producto y tamaño envase-->
-                    <div class="col-9 bg-white">
-                        <a class = "font-weight-bold, h3" href="{{ url_for('producto', producto_id=n["id"]) }}">{{ n.name }}</a> 
-                        <!-- Marca -->
-                        <div class="col-9 bg-white">
-                            Marca: {{ n.marca }} Cantidad: {{ n.cantidad }} {{ n.unidad }}
-                        </div>
+        <div class="card mb-3" style="max-width: 15rem;">
+                <img class="card-img-top" src="static/images/{{n.id}}.jpg" >
+                <div class="card-body">
+                  <!-- Precio -->
+                  <h5>{{ n.precio }}€ </h5>
+                  <!-- precio/unidad -->
+                  <h6 class="car-subtitle mb-2 text-muted">
+                    <!--     {{ n.precio / n.cantidad }} €/{{n.unidad}}  -->
 
-                        <div class="col-9 bg-white">
-                            Codigo Barras: {{ n.codigoBarras }}
-                        </div>
-                    </div>
-                        
-
-
-            <!-- Boton editar --!>
-        <a href="{{ url_for('edit', id=n.id) }}">
-            <span class="badge badge-primary">Editar Producto</span>
-
-            <!-- Boton comprar --!>
-        <a href="{{ url_for('comprar_producto', id=n.id) }}">
-            <span class="badge badge-secondary">Comprar</span>
-
-        </a>
+                   {{ "%.2f"|format(n.precio  /  n.cantidad|float) }} €/{{n.unidad}}
+                </h6>
+                <a class="card-text bold" href="{{ url_for('producto', producto_id=n["id"]) }}">{{ n.name  }}</a>
+                  <div class="col-9 bg-white"> {{n.marca}} {{n.cantidad}} {{n.unidad}}</div>
+                  <div class="fst-italic font-monospace"> {{n.codigoBarras}} </div>
+                  <a href="{{ url_for('edit', id=n.id) }}" class="btn btn-primary">Editar</a>
+                  <a href="{{ url_for('comprar_producto', id=n.id) }}" class="btn btn-secondary">Comprar</a>
+                </div>
+        </div>
         
-        <p></p>
-        <p></p>
     {% endfor %}
-
+</div>
 {% endblock %}

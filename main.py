@@ -124,6 +124,7 @@ def index():
     return render_template('index.html') 
 
 # Ver la lista de productos
+# TODO: Pasar tambien el precio del producto:  <24-02-23, yourname> #
 @app.route('/lista_productos',methods=['GET','POST'])
 def bd():
     print("*** Estoy en bd ***")
@@ -133,6 +134,12 @@ def bd():
             name = "%"+name+"%"
             dato2 = bbdd.tbl_producto.get_producto(name,"name")
             if dato2:
+                for prod in dato2:
+                    ultimo_precio = 0
+                    dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"id")
+                    if dato_compra:
+                        ultimo_precio = dato_compra[-1]["precio"]
+                    prod.update({"precio":ultimo_precio})
                 return render_template('lista_productos.html',datos=dato2) 
             else:
                 print("NO HAY DATOS")
@@ -141,6 +148,15 @@ def bd():
                 return render_template('lista_productos.html',datos=dato) 
 
         dato = bbdd.tbl_producto.saca_todo()
+        
+        for prod in dato:
+            ultimo_precio = 0
+            dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"id")
+            if dato_compra:
+                ultimo_precio = dato_compra[-1]["precio"]
+            prod.update({"precio":ultimo_precio})
+
+        print(">>> Primeros 10 datos:",dato[0:10])
         return render_template('lista_productos.html',datos=dato) 
 
 
