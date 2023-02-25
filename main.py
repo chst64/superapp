@@ -30,6 +30,11 @@ V4: Modificada para NO usar SQLAlchemy
 - Que hagas una lista de compra virtual y te diga los productos que han subido de precio y los que han bajado. Por ejemplo para saber si las ofertas del 3x2 del Carrefour son reales o te estan timando
 - Cuando haces una compra volver a pagina productos
 - en lista_compras.html y lista_productos.html añadir boton para volver al principio de la pagina
+- Editar la compra desde la pagina de producto
+- Boton subir para ir al inicio de pagina
+- Lector de codigo de barras
+- Boton de editar compra en la pagina de producto
+
 """
 
 from datetime import date,datetime
@@ -79,7 +84,8 @@ class Producto_Form(FlaskForm):
     categoria = StringField("Categoria")
     unidad = StringField("Unidad")
     precio = DecimalField("Precio")
-    puntuacion = DecimalField("Puntuacion")
+    #puntuacion = DecimalField("Puntuacion")
+    puntuacion = DecimalField("Puntuacion",default=5)
     observaciones = StringField("Observaciones")
     submit = SubmitField("Enviar")
 
@@ -136,10 +142,10 @@ def bd():
             if dato2:
                 for prod in dato2:
                     ultimo_precio = 0
-                    dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"id")
+                    dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
                     if dato_compra:
                         ultimo_precio = dato_compra[-1]["precio"]
-                    prod.update({"precio":ultimo_precio})
+                    prod.update({"ultimo_precio":ultimo_precio})
                 return render_template('lista_productos.html',datos=dato2) 
             else:
                 print("NO HAY DATOS")
@@ -151,10 +157,10 @@ def bd():
         
         for prod in dato:
             ultimo_precio = 0
-            dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"id")
+            dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
             if dato_compra:
                 ultimo_precio = dato_compra[-1]["precio"]
-            prod.update({"precio":ultimo_precio})
+            prod.update({"ultimo_precio":ultimo_precio})
 
         print(">>> Primeros 10 datos:",dato[0:10])
         return render_template('lista_productos.html',datos=dato) 
@@ -399,5 +405,5 @@ def about():
 
 
 if __name__=='__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0',port=5001, debug=True)
     #app.run(host='0.0.0.0',port=5000)

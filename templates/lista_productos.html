@@ -20,16 +20,16 @@
                 <img class="card-img-top" src="static/images/{{n.id}}.jpg" >
                 <div class="card-body">
                   <!-- Precio -->
-                  <h5>{{ n.precio }}€ </h5>
+                  <h5>{{ n.ultimo_precio }}€ </h5>
                   <!-- precio/unidad -->
                   <h6 class="car-subtitle mb-2 text-muted">
-                    <!--     {{ n.precio / n.cantidad }} €/{{n.unidad}}  -->
 
-                   {{ "%.2f"|format(n.precio  /  n.cantidad|float) }} €/{{n.unidad}}
+                   {{ "%.2f"|format(n.ultimo_precio  /  n.cantidad|float) }} €/{{n.unidad}}
                 </h6>
                 <a class="card-text bold" href="{{ url_for('producto', producto_id=n["id"]) }}">{{ n.name  }}</a>
                   <div class="col-9 bg-white"> {{n.marca}} {{n.cantidad}} {{n.unidad}}</div>
                   <div class="fst-italic font-monospace"> {{n.codigoBarras}} </div>
+                    <!--     {{ n.ultimo_precio / n.cantidad }} €/{{n.unidad}}  -->
                   <a href="{{ url_for('edit', id=n.id) }}" class="btn btn-primary">Editar</a>
                   <a href="{{ url_for('comprar_producto', id=n.id) }}" class="btn btn-secondary">Comprar</a>
                 </div>

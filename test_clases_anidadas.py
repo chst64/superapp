@@ -92,15 +92,16 @@ with tool.basedatos(bbdd_file) as bbdd:
 
     for prod in todos_productos:
         ultimo_precio = 0
-        dato = bbdd.tbl_compra.get_producto(prod["id"],"id")
+        dato = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
+        print(f"De compras:",dato)
         if dato:
             ultimo_precio = dato[-1]["precio"]
 
-        prod.update({"precio":ultimo_precio})
+        prod.update({"ultimo_precio":ultimo_precio})
         print(f"""
         id: {prod["id"]}
         codigoBarras: {prod["codigoBarras"]}
         name: {prod["name"]}
         marca: {prod["marca"]}
-        precio: {prod["precio"]}
+        ultimo_precio: {prod["ultimo_precio"]}
         """)
