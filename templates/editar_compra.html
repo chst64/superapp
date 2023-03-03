@@ -23,33 +23,31 @@
 <!-- Nombre Precio --!>
     <div class="form-group">
         <div class="row">
-            <label class="col-sm col-form-label ml-2"> {{ form.precio.label }} </label>
-        </div>
-
-        <div class="col-10">
-        <input type="text" name="precio" placeholder= {{ compra["precio"] }} >
-
+          <div class="col">
+              <label class="col-sm col-form-label ml-2"> {{ form.precio.label }} </label>
+          </div>
+          <div class="col-10">
+            <input type="text" name="precio" placeholder= {{ compra["precio"] }} >
             <!-- {{ form.precio(class_="form-control-sm") }} -->
-
+          </div>
         </div>
     </div>
 
 <!-- Nombre Fecha --!>
-    <div class="form-group">
-        <div class="row">
-        <label class="col-sm col-form-label ml-2"> {{ form.fecha.label }} </label>
-        </div>
-
-    <div class="col-10">
-        {{ form.fecha(class_="form-control-sm") }}
-    </div>
-
+    <label>Fecha</label>
+    <input type="date" value={{compra["fecha"]}} name="fecha" id="fecha"/>
 <!-- Nombre Empaquetado --!>
     <div class="form-group">
-        <label for="empaquetado">empaquetado</label>
-        <input type="text" name="empaquetado" placeholder="Post empaquetado"
-                  class="form-control"
-                  value="{{ request.form['empaquetado'] or compra['empaquetado'] }}">
+      <div class="row">
+        <div class="col">
+          <label for="empaquetado">empaquetado</label>
+        </div>
+        <div class="col-10">
+          <input type="text" name="empaquetado" placeholder="Post empaquetado"
+                    class="form-control"
+                    value="{{ request.form['empaquetado'] or compra['empaquetado'] }}">
+        </div>
+      </div>
     </div>
 
 <!-- Nombre Observaciones --!>

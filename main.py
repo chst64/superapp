@@ -151,6 +151,13 @@ def bd():
                 print("NO HAY DATOS")
                 
                 dato = bbdd.tbl_producto.saca_todo()
+                for prod in dato:
+                    print(">>> Tengo",prod)
+                    ultimo_precio = 0
+                    dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
+                    if dato_compra:
+                        ultimo_precio = dato_compra[-1]["precio"]
+                    prod.update({"ultimo_precio":ultimo_precio})
                 return render_template('lista_productos.html',datos=dato) 
 
         dato = bbdd.tbl_producto.saca_todo()
@@ -405,5 +412,5 @@ def about():
 
 
 if __name__=='__main__':
-    app.run(host='0.0.0.0',port=5001, debug=True)
+    app.run(host='0.0.0.0',port=5000, debug=True)
     #app.run(host='0.0.0.0',port=5000)

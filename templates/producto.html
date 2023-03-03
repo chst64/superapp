@@ -4,13 +4,15 @@
 
 
     <!-- Nombre del producto y marca -->
-    <p><h2> {{ producto['name'] }} - {{ producto['marca']  }} </h2> </p> 
+    <p><h2> {{ producto['name'] }} - {{ producto['marca']  }} - {{ producto['cantidad'] }} {{ producto['unidad'] }}</h2> </p> 
 
     <!-- Imagen del producto -->
     <img src="static/images/{{ producto['id'] }}.jpg" style="width: 20%" />
 
     <!-- Codigo barras -->
     <p> Codigo Barras: {{ producto['codigoBarras'] }} </p>
+
+    <p> Cantidad: {{ producto['cantidad'] }} {{ producto['unidad'] }}</p>
 
     <!-- Observaciones -->
     <p> Observaciones: {{ producto['observaciones'] }} </p>
@@ -21,16 +23,16 @@
         </a>
 
     <!-- Boton comprar --!>
-        <a href="{{ url_for('comprar_producto', id=producto['id']) }}">
-            <span class="badge badge-secondary">Comprar</span>
-        </a>
+        <a href="{{ url_for('comprar_producto', id=producto['id']) }}" class="btn btn-primary">Comprar</a>
 
-    <!-- Precio -->
-    <p class=h3>Ultimas compras</p>
+    <!-- Ultimas compras -->
+    <p class="h3">Ultimas compras</p>
     
     {% for compra in compras %}
-    <h3>{{ compra.fecha }} - {{ compra.precio }}€ <img src="static/images/{{compra.supermercado.nombre}}.svg"
-        style="height:30px;"/> </h3>
+    <h3>{{ compra.fecha }} - {{ compra.precio }}€ 
+      <img src="static/images/{{compra.supermercado}}.svg" /> 
+      <a href="{{url_for('editar_compra',id=compra['id'])}}" class="btn btn-warning">Editar compra</a>
+    </h3>
     {% endfor %}
 
     <!-- Pongo estrellas segun la puntuacion -->
