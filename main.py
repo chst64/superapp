@@ -25,15 +25,14 @@ V4: Modificada para NO usar SQLAlchemy
 - En nuevo producto, mejorar el ancho de los campos
 - En nueva compra, mejorar la disposicion de los campos
 - Posibilidad de crear nuevos supermercados
-- No funciona "editar compra" y no sale la lista de supermercados
 - Coger datos de es.openfoodfacts.org
 - Que hagas una lista de compra virtual y te diga los productos que han subido de precio y los que han bajado. Por ejemplo para saber si las ofertas del 3x2 del Carrefour son reales o te estan timando
 - Cuando haces una compra volver a pagina productos
 - en lista_compras.html y lista_productos.html añadir boton para volver al principio de la pagina
-- Editar la compra desde la pagina de producto
 - Boton subir para ir al inicio de pagina
 - Lector de codigo de barras
 - Boton de editar compra en la pagina de producto
+- Ordenar lista_productos en modo descendente por id, de modo que los productos recien añadidos a la bbdd salgan primero
 
 """
 
@@ -136,11 +135,13 @@ def index():
 def bd():
     print("*** Estoy en bd ***")
     with tool.basedatos(DB_FILE) as bbdd:
-        if request.method == 'POST':
+
+        # Se ha hecho una busqueda de un producto 
+        if request.method == 'POST': 
             name = request.form['name'] 
             name = "%"+name+"%"
             dato2 = bbdd.tbl_producto.get_producto(name,"name")
-            if dato2:
+            if dato2: # Aparecen resultados en la busqueda
                 for prod in dato2:
                     ultimo_precio = 0
                     dato_compra = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
@@ -148,7 +149,9 @@ def bd():
                         ultimo_precio = dato_compra[-1]["precio"]
                     prod.update({"ultimo_precio":ultimo_precio})
                 return render_template('lista_productos.html',datos=dato2) 
-            else:
+
+             # La busqueda no da resultados
+            else: 
                 print("NO HAY DATOS")
                 
                 dato = bbdd.tbl_producto.saca_todo()
@@ -162,6 +165,9 @@ def bd():
                 return render_template('lista_productos.html',datos=dato) 
 
         dato = bbdd.tbl_producto.saca_todo()
+
+        # Se dan la vuelta a los datos para que se imprima primero los ultimos productos 
+        dato_reverse = dato[::-1]
         
         for prod in dato:
             ultimo_precio = 0
@@ -170,8 +176,7 @@ def bd():
                 ultimo_precio = dato_compra[-1]["precio"]
             prod.update({"ultimo_precio":ultimo_precio})
 
-        print(">>> Primeros 10 datos:",dato[0:10])
-        return render_template('lista_productos.html',datos=dato) 
+        return render_template('lista_productos.html',datos=dato_reverse) 
 
 
 # Ver la lista de compras 

@@ -12,8 +12,9 @@ import sqlite3
 
 
 class basedatos():
-
-    """Docstring for basedatos. """
+    """
+    Esta es la docstring de la clase basedatos
+    """
     def __init__(self,fichero_basedatos):
         print("Hola estoy en __init__")
         self.fichero_basedatos = fichero_basedatos
@@ -22,6 +23,12 @@ class basedatos():
     class tabla():
 
         def __init__(self, cursor, nombre_tabla):
+            """
+            Una tabla dentro de la base de datos.
+
+            self.columnas: devuelve una lista de tuplas con los datos de las columnas de la tabla
+            self.nombre: devuelve nombre de la tabla
+            """
             self.nombre = nombre_tabla
             self.cursor = cursor
             
@@ -37,13 +44,10 @@ class basedatos():
             si quieres buscar todo lo que tenga la palabra 'aceituna' hay que pasarle
             la cadena '%aceituna%'
 
-            TODO: Que devuelva una lista de diccionarios donde los indices son el nombre de las columnas
-
-            producto: palabra a buscar
+            producto: palabra a buscar. Puedes usar %palabra% como si fuesen *
             columna: columna de la tabla donde buscar
             return: Lista de tuplas con el resultado
             """
-            #cadena_a_buscar = '%'+producto+'%'
             cadena_a_buscar = producto
             SQL_QUERY_PRODUCTO = f"select * from {self.nombre} where {columna} like ? "
             self.cursor.execute(SQL_QUERY_PRODUCTO,(producto,))
@@ -58,12 +62,15 @@ class basedatos():
                     dicc_tmp.update({lista_col[i][0]:res[i]})
                 lista_res.append(dicc_tmp)
 
-            #print(">>>>>!!!! Diccionario final:",lista_res)
-
-
             return(lista_res)
 
         def saca_todo(self):
+            """
+            Devuelve todos los elementos de la tabla
+            Parametros:
+            return: Lista de diccionarios: [{id,nombre},{id,nombre},...]
+
+            """
             SQL_QUERY_ALL = f"select * from {self.nombre}"
 
             self.cursor.execute(SQL_QUERY_ALL)
@@ -79,6 +86,9 @@ class basedatos():
             return(lista_res)
 
         def crea_fila(self,columnas,datos):
+            """
+            Crea una entrada
+            """
             sql_insert = f"insert into {self.nombre}{columnas} values {datos} "
             self.cursor.execute(sql_insert)
 
@@ -114,7 +124,9 @@ class basedatos():
 
 
     def __enter__(self):
-        print("Hola estoy en __enter__")
+        """
+        Docstring de __enter__
+        """
 
         self.conn = sqlite3.connect(self.fichero_basedatos)
         self.cursor = self.conn.cursor()
