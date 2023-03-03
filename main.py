@@ -53,6 +53,7 @@ app.config['SECRET_KEY']='abcde'
 DB_FILE = "./basedatos.db"
 supermercado_defecto = 2
 #db = SQLAlchemy(app)
+__version__ = "3-marzo-2023"
 
 
 #def get_producto(producto_id):
@@ -127,7 +128,7 @@ class Edit_Compra_Form(FlaskForm):
 @app.route('/')
 def index():
     print(">>>>>>>>>> Estoy en indice")
-    return render_template('index.html') 
+    return render_template('index.html',version=__version__) 
 
 # Ver la lista de productos
 # TODO: Pasar tambien el precio del producto:  <24-02-23, yourname> #
@@ -220,6 +221,8 @@ def producto(producto_id):
 def create2():
     """
     Crea un producto nuevo
+
+    return: pagina_web create.html
     """
     with tool.basedatos(DB_FILE) as bbdd:
         form = Producto_Form()
@@ -250,7 +253,12 @@ def create2():
 # Editar producto
 @app.route('/<int:id>/edit', methods=['GET','POST'])
 def edit(id):
+    """
+    Edita un producto existente
 
+    Parametros:
+    id: id del producto a editar
+    """
     with tool.basedatos(DB_FILE) as bbdd:
         producto = bbdd.tbl_producto.get_producto(id,"id")[0]
      
@@ -288,6 +296,12 @@ def edit(id):
 # Editar compra
 @app.route('/compra/<int:id>', methods=['GET','POST'])
 def editar_compra(id):
+    """
+    Edita una compra
+
+    Parametros:
+    id: id de la compra a editar
+    """
 
     with tool.basedatos(DB_FILE) as bbdd:
 
@@ -335,6 +349,9 @@ def editar_compra(id):
 def comprar_producto(id):
     """
     Crea la compra de un producto
+
+    Parametros:
+    id: id del producto que vamos a comprar
     """
     print(">>>> Estoy en comprar_producto()")
 
@@ -381,6 +398,12 @@ def comprar_producto(id):
 # Borrar producto
 @app.route('/<int:id>/delete', methods=('POST',))
 def delete(id):
+    """
+    Borra un producto
+
+    Parametros:
+    id: Id del producto a borrar
+    """
     
     with tool.basedatos(DB_FILE) as bbdd:
         bbdd.tbl_producto.borra_fila(id)
@@ -391,6 +414,13 @@ def delete(id):
 # Borrar compra
 @app.route('/<int:id>/borra_compra', methods=('POST','GET'))
 def borra_compra(id):
+    """
+    Borra una compra
+
+    Parametros:
+    id: Id de la compra que vamos a borrar
+    """
+
     print(f"Estoy en borra compra con id {id}")
 
     with tool.basedatos(DB_FILE) as bbdd:
@@ -402,6 +432,9 @@ def borra_compra(id):
 # Para hacer pruebas
 @app.route('/about',methods=['GET','POST'])
 def about():
+    """
+    Pagina para pruebas
+    """
     with tool.basedatos(DB_FILE) as bbdd:
 
         num_productos = len(bbdd.tbl_producto.saca_todo())
