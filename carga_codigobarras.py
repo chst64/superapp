@@ -10,9 +10,15 @@ import math
 import openfoodfacts
 import requests
 import shutil
+import sys
+import logging
+import pdb
 
 bbdd_file = "./basedatos.db"
+__version__ = "18-marzo-2023"
 
+# Imprimir en color rojo
+def prRed(skk): print("\033[91m {}\033[00m" .format(skk))
 
 def chequeo_EAN13(barcode):
     """Comprobacion de que el codigo de barras de tipo EAN13 es correcto con el digito de control
@@ -69,6 +75,7 @@ def lee_codigos(fichero_codigos):
             else:
                 lista_codigos_barras.append(line)
 
+    #pdb.set_trace()
     return(lista_codigos_barras)
 
 def existe_codebar(codigo_barras):
@@ -82,13 +89,16 @@ def existe_codebar(codigo_barras):
     print("Recibido",codigo_barras)
     with tool.basedatos(bbdd_file) as bbdd:
         datos = bbdd.tbl_producto.get_producto(codigo_barras,"codigoBarras")
-        print(">>>> datos de bbdd",datos)
+
+        logging.debug(f"Recibido de bbdd: {datos}")
 
         # La lista 'datos' tiene algo
         if datos:
+            logging.info(f">>>> datos de bbdd: { datos[0]['name'] } - {datos[0]['marca']} ")
             return True
         # La lista 'datos' esta vacia
         else:
+            logging.info(f">>> busqueda de bbdd vacia")
             return False
 
 def info_producto(codigoBarras):
@@ -102,8 +112,7 @@ def info_producto(codigoBarras):
 
 def get_foodfacts(codigoBarras):
     """
-    Pruebas de webscrapping para coger informacion de un producto
-    de la pagina 
+    Cogiendo datos de openfoodfacts
 
     https://github.com/openfoodfacts/openfoodfacts-python
     """
@@ -117,7 +126,7 @@ def get_foodfacts(codigoBarras):
     info={'code':'0','marca':'sinmarca','nombre':'sin nombre','cantidad':1,'imagen':None}
     if product['status_verbose']=='product found':
         if "status_verbose" in product:
-            print("Status-verbose:",product['status_verbose'])
+            logging.info("Status-verbose:",product['status_verbose'])
         if "code" in product:
             info.update({'codigobarras':product['code']})
         if "brands" in product['product']:
@@ -131,7 +140,8 @@ def get_foodfacts(codigoBarras):
 
         return(info)
     else:
-        print(">>> ",codigoBarras, " no existe en openfoodfacts")
+        pdb.set_trace()
+        logging.info(">>> ",codigoBarras, " no existe en openfoodfacts")
         return None
 
 def inserta_producto(info_producto):
@@ -154,7 +164,7 @@ def inserta_producto(info_producto):
     with tool.basedatos(bbdd_file) as bbdd:
         id = bbdd.tbl_producto.crea_fila(datos_columnas,datos)
         bbdd.conn.commit()
-        print("Añadido producto",datos, " en id:",id)
+        logging.info("Añadido producto",datos, " en id:",id)
 
         # Descarga la foto del producto si existe y lo nombra con su id 
         if info_producto['imagen'] != None:
@@ -166,7 +176,7 @@ def inserta_producto(info_producto):
             try:
                 shutil.move(nombre_foto,"./static/images/")
             except:
-                print("Hay un error al mover la foto")
+                logging.warning("Hay un error al mover la foto")
 
 
 
@@ -175,18 +185,38 @@ def inserta_producto(info_producto):
 # *********************************
 
 if __name__ == "__main__":
-    lista_codigos = lee_codigos("EAN.txt")
+    
+    # LOGGER
+    logging.basicConfig(
+            filename='carga_codigobarras.log',
+            filemode='w',
+            format='%(asctime)s:%(levelname)s - %(message)s',
+            level=logging.INFO)
 
-    for codigo in lista_codigos:
-        print("********************")
-        if existe_codebar(codigo):
-            print(f"el codigo -{codigo}- SII existe")
-        else:
-            print(f"el codigo -{codigo}- NO existe en la bbdd. Cojo informacion de openfoodfacts")
-            datos = get_foodfacts(codigo)
+    logging.info("**************** \n Ejecutando carga_codigobarras.py")
+    logging.info(f"** {__version__} **")
 
-            if datos!=None:
-                inserta_producto(get_foodfacts(codigo))
+
+    if len(sys.argv)>1:
+        lista_codigos = lee_codigos(sys.argv[1])
+
+        for codigo in lista_codigos:
+
+            logging.info("==========================")
+            logging.info(f"Buscando codigo {codigo}")
+            if existe_codebar(codigo):
+                logging.info(f"el codigo -{codigo}- SI existe en la bbdd")
+            else:
+                logging.info(f"el codigo -{codigo}- NO existe en la bbdd. Cojo informacion de openfoodfacts")
+                datos = get_foodfacts(codigo)
+
+                if datos!=None:
+                    inserta_producto(get_foodfacts(codigo))
+
+    else:
+        logging.critical("No has pasado un fichero con codigos de barras")
+        prRed("** Tienes que pasar un fichero con codigo de barras")
+
 
 
 

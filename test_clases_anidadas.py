@@ -10,23 +10,29 @@ from datetime import date,datetime
 
 
 
-bbdd_file = "./basedatos.db"
+bbdd_file = "bbdd_piezas.db"
 
 with tool.basedatos(bbdd_file) as bbdd:
     print(">>>> Tablas de la bbdd:",bbdd.tablas)
     print(">>>> Vistas de la bbdd:",bbdd.vistas)
-    print(">>>> Nombre de tbl_producto:",bbdd.tbl_producto.nombre)
-    print(">>>> Saca_todo de tbl_producto: ",bbdd.tbl_producto.saca_todo()[0:5])
-    print(">>>> Columnas de tbl_producto:",bbdd.tbl_producto.columnas)
-    print(">>>> Todos los productos con '*patata*': ",bbdd.tbl_producto.get_producto("%patata%","name"))
+    print(">>>> Nombre de tbl_piezas:",bbdd.tbl_piezas.nombre)
+    print(">>>> Nombre de tbl_proveedores:",bbdd.tbl_proveedores.nombre)
+    print(">>>> Nombre de tbl_rel_pieza_proveedor:",bbdd.tbl_rel_pieza_proveedor.nombre)
+    
 
-    print(">>>>> Producto con id=3: ",bbdd.tbl_producto.get_producto("3","id"))
-    print("La marca del producto id:10",bbdd.tbl_producto.get_producto("10","id")[0]["marca"])
-    print("El nombre del producto id:10",bbdd.tbl_producto.get_producto("10","id")[0]["name"])
+    # print(">>>> Nombre de tbl_producto:",bbdd.tbl_producto.nombre)
+    # print(">>>> Saca_todo de tbl_producto: ",bbdd.tbl_producto.saca_todo()[0:5])
+    # print(">>>> Columnas de tbl_producto:",bbdd.tbl_producto.columnas)
+    # bbdd.tbl_compra.columnas
+    # print(">>>> Todos los productos con '*patata*': ",bbdd.tbl_producto.get_producto("%patata%","name"))
 
-    print("======== vista_compra ============")
-    print(f""" >>>>>> Columnas vista_compra: {bbdd.vista_compra.columnas} """)
-    print(">>> Saca todo compras:",bbdd.vista_compra.saca_todo()[0:5])
+    # print(">>>>> Producto con id=3: ",bbdd.tbl_producto.get_producto("3","id"))
+    # print("La marca del producto id:10",bbdd.tbl_producto.get_producto("10","id")[0]["marca"])
+    # print("El nombre del producto id:10",bbdd.tbl_producto.get_producto("10","id")[0]["name"])
+
+    # print("======== vista_compra ============")
+    # print(f""" >>>>>> Columnas vista_compra: {bbdd.vista_compra.columnas} """)
+    # print(">>> Saca todo compras:",bbdd.vista_compra.saca_todo()[0:5])
 
 
 # *** Crear entrada ***
@@ -88,20 +94,20 @@ with tool.basedatos(bbdd_file) as bbdd:
 
 # *** Devuelve productos con su precio
 
-    todos_productos = bbdd.tbl_producto.saca_todo()
+    # todos_productos = bbdd.tbl_producto.saca_todo()
 
-    for prod in todos_productos:
-        ultimo_precio = 0
-        dato = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
-        print(f"De compras:",dato)
-        if dato:
-            ultimo_precio = dato[-1]["precio"]
+    # for prod in todos_productos:
+    #     ultimo_precio = 0
+    #     dato = bbdd.tbl_compra.get_producto(prod["id"],"producto_id")
+    #     print(f"De compras:",dato)
+    #     if dato:
+    #         ultimo_precio = dato[-1]["precio"]
 
-        prod.update({"ultimo_precio":ultimo_precio})
-        print(f"""
-        id: {prod["id"]}
-        codigoBarras: {prod["codigoBarras"]}
-        name: {prod["name"]}
-        marca: {prod["marca"]}
-        ultimo_precio: {prod["ultimo_precio"]}
-        """)
+    #     prod.update({"ultimo_precio":ultimo_precio})
+    #     print(f"""
+    #     id: {prod["id"]}
+    #     codigoBarras: {prod["codigoBarras"]}
+    #     name: {prod["name"]}
+    #     marca: {prod["marca"]}
+    #     ultimo_precio: {prod["ultimo_precio"]}
+    #     """)

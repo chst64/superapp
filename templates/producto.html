@@ -30,7 +30,7 @@
     
     {% for compra in compras %}
     <h3>{{ compra.fecha }} - {{ compra.precio }}€ 
-      <img src="static/images/{{compra.supermercado}}.svg" /> 
+      <img src="static/images/{{compra.supermercado}}.jpg" /> 
       <a href="{{url_for('editar_compra',id=compra['id'])}}" class="btn btn-warning">Editar compra</a>
     </h3>
     {% endfor %}

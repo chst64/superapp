@@ -16,7 +16,7 @@ class basedatos():
     Esta es la docstring de la clase basedatos
     """
     def __init__(self,fichero_basedatos):
-        print("Hola estoy en __init__")
+        # print("Hola estoy en __init__")
         self.fichero_basedatos = fichero_basedatos
     
 
@@ -91,6 +91,7 @@ class basedatos():
             """
             sql_insert = f"insert into {self.nombre}{columnas} values {datos} "
             self.cursor.execute(sql_insert)
+            return(self.cursor.lastrowid)
 
         def actualiza_fila(self,id,columna,dato):
             """
@@ -101,9 +102,9 @@ class basedatos():
             :columna: columna de la fila a modificar
             :dato: nuevo valor
             """
-            print("He recibido:",columna,dato)
+            # print("He recibido:",columna,dato)
             sql_update = f"""update {self.nombre} set '{columna}' = '{dato}' where id={id} """
-            print(">>SQL_UPDATE:",sql_update)
+            # print(">>SQL_UPDATE:",sql_update)
             self.cursor.execute(sql_update)
 
         def borra_fila(self, id):
@@ -120,8 +121,8 @@ class basedatos():
                 raise e
             else:
                 #self.bbdd.commit()
-                print("Borrada la entrada con id ",id)
-
+                #print("Borrada la entrada con id ",id)
+                pass
 
     def __enter__(self):
         """
