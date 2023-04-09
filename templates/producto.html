@@ -7,7 +7,7 @@
     <p><h2> {{ producto['name'] }} - {{ producto['marca']  }} - {{ producto['cantidad'] }} {{ producto['unidad'] }}</h2> </p> 
 
     <!-- Imagen del producto -->
-    <img src="static/images/{{ producto['id'] }}.jpg" style="width: 20%" />
+    <a href="{{ url_for('upload_file',id=producto['id'] ) }} "><img src="static/images/{{ producto['id'] }}.jpg" style="width: 20%" /> </a>
 
     <!-- Codigo barras -->
     <p> Codigo Barras: {{ producto['codigoBarras'] }} </p>

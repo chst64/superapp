@@ -35,25 +35,30 @@ V4: Modificada para NO usar SQLAlchemy
 - Ordenar lista_productos en modo descendente por id, de modo que los productos recien añadidos a la bbdd salgan primero
 
 """
-
+import os
 from datetime import date,datetime
 from flask import Flask, render_template, request, url_for, flash, redirect
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import Form, StringField, IntegerField, DecimalField, SelectField,SubmitField, DateField
 from wtforms.validators import DataRequired, Email, Length
 from werkzeug.exceptions import abort
+from werkzeug.utils import secure_filename
 
 import tools_sqlite3 as tool
 
-app = Flask(__name__)
-app.config['SECRET_KEY']='abcde'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basedatos.db'
 DB_FILE = "./basedatos.db"
+UPLOAD_FOLDER = './static/images/'
+ALLOWED_EXTENSIONS = {'jpg'}
+
 supermercado_defecto = 2
 #db = SQLAlchemy(app)
 __version__ = "3-marzo-2023"
 
+app = Flask(__name__)
+app.config['SECRET_KEY']='abcde'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basedatos.db'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #def get_producto(producto_id):
 #    
@@ -68,6 +73,11 @@ __version__ = "3-marzo-2023"
 #
 #def compras_producto(producto_id):
 #    compras_del_producto = db.session.query(Compra).filter_by
+
+def allowed_file(filename):
+    return '.' in filename and \
+            filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Formularios de FlaskForm
 
@@ -206,6 +216,7 @@ def compras():
         dato = bbdd.vista_compra.saca_todo()
         return render_template('lista_compras.html',datos=dato)
         
+# Pagina del producto
 @app.route('/<int:producto_id>')
 def producto(producto_id):
     """
@@ -433,7 +444,42 @@ def borra_compra(id):
         bbdd.conn.commit()
         #flash("La compra fue borrada")
         return redirect(url_for('index'))
- 
+
+# Subir archivo
+@app.route('/<int:id>/upload_product_photo', methods=['GET', 'POST'])
+def upload_file(id):
+    print(">>> Recibido id:",id)
+    if request.method == 'POST':
+        print(">>> id:",id)
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(">>> filename:",filename)
+            nombre_fichero = str(id)+'.jpg'
+            print(">>> ",nombre_fichero)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], nombre_fichero ))
+            return redirect(url_for('producto',producto_id=id))
+    return '''
+<!doctype html>
+    <title>Subir nuevo archivo</title>
+    <h1>Subir nuevo archivo</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Subir>
+    </form>
+    '''
+
+
+
 # Para hacer pruebas
 @app.route('/about',methods=['GET','POST'])
 def about():
