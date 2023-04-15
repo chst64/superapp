@@ -36,7 +36,9 @@ V4: Modificada para NO usar SQLAlchemy
 
 """
 import os
+import logging
 from datetime import date,datetime
+
 from flask import Flask, render_template, request, url_for, flash, redirect
 # from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
@@ -45,15 +47,18 @@ from wtforms.validators import DataRequired, Email, Length
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 
-import tools_sqlite3 as tool
+from utilidades_extra import tools_sqlite3 as tool
+from utilidades_extra import carga_codigobarras as carga_codebar
+
+from logging.config import dictConfig
 
 DB_FILE = "./basedatos.db"
 UPLOAD_FOLDER = './static/images/'
-ALLOWED_EXTENSIONS = {'jpg'}
+ALLOWED_EXTENSIONS = {'jpg','txt'}
 
 supermercado_defecto = 2
 #db = SQLAlchemy(app)
-__version__ = "3-marzo-2023"
+__version__ = "12-abril-2023"
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='abcde'
@@ -136,14 +141,14 @@ class Edit_Compra_Form(FlaskForm):
 
 @app.route('/')
 def index():
-    print(">>>>>>>>>> Estoy en indice")
+    logger.info("Hola desde index")
     return render_template('index.html',version=__version__) 
 
 # Ver la lista de productos
 # TODO: Pasar tambien el precio del producto:  <24-02-23, yourname> #
 @app.route('/lista_productos',methods=['GET','POST'])
 def bd():
-    print("*** Estoy en bd ***")
+    logger.info("Hola desde bd")
     with tool.basedatos(DB_FILE) as bbdd:
 
         # Se ha hecho una busqueda de un producto 
@@ -437,6 +442,8 @@ def borra_compra(id):
     id: Id de la compra que vamos a borrar
     """
 
+
+
     print(f"Estoy en borra compra con id {id}")
 
     with tool.basedatos(DB_FILE) as bbdd:
@@ -448,6 +455,7 @@ def borra_compra(id):
 # Subir archivo
 @app.route('/<int:id>/upload_product_photo', methods=['GET', 'POST'])
 def upload_file(id):
+    logger.info("Hola desde upload_file")
     print(">>> Recibido id:",id)
     if request.method == 'POST':
         print(">>> id:",id)
@@ -479,6 +487,54 @@ def upload_file(id):
     '''
 
 
+# Subir lista de codigos de barras
+@app.route('/upload_codebars', methods=['GET', 'POST'])
+def sube_codigosbarras():
+    logger.info("Hola desde sube_codigosbarras")
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+
+            nombre_fichero = 'lista_codigos_barras.txt'
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], nombre_fichero ))
+
+            logger.debug(f">>> filename:{filename}")
+            logger.debug(f">>> nombre_fichero:{nombre_fichero}")
+            ruta_fichero = "./static/images/"+nombre_fichero
+            lista_codigos = carga_codebar.lee_codigos(ruta_fichero)
+            for codigo in lista_codigos:
+                logger.debug(f"Comprobando codigo:{codigo}")
+                if carga_codebar.existe_codebar(codigo,bbdd_file=DB_FILE):
+                    logger.debug(f"El codigo -{codigo}- si existe en la bbdd")
+                else:
+                    logger.debug(f"El codigo -{codigo}- no existe en la bbdd. Cojo info de foodfacts")
+                    datos = carga_codebar.get_foodfacts(codigo)
+
+                    logger.debug(f"Info de foodfacts: {datos}")
+                    if datos!=None:
+                        carga_codebar.inserta_producto(carga_codebar.get_foodfacts(codigo),DB_FILE)
+
+
+            return redirect(url_for('bd'))
+    return '''
+<!doctype html>
+    <title>Subir nuevo archivo</title>
+    <h1>Subir nuevo archivo</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Subir>
+    </form>
+    '''
 
 # Para hacer pruebas
 @app.route('/about',methods=['GET','POST'])
@@ -486,6 +542,7 @@ def about():
     """
     Pagina para pruebas
     """
+    logger.info("Hola desde about")
     with tool.basedatos(DB_FILE) as bbdd:
 
         num_productos = len(bbdd.tbl_producto.saca_todo())
@@ -496,5 +553,26 @@ def about():
 
 
 if __name__=='__main__':
+    logging.basicConfig(filename='./logs/superapp.log',
+            filemode='w',
+            format='%(name)s - %(levelname)s - %(message)s',
+            level=logging.INFO)
+
+    # dictConfig({
+    #     'version': 1,
+    #     'formatters': {'default': { 'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s', }},
+    #     'handlers': { "console": { "class": "logging.StreamHandler", "stream": "ext://sys.stdout", "formatter": "default", },
+    #              "file": { "class": "logging.FileHandler", "filename": "./logs/superapp.log", "formatter": "default", },
+    #                 },
+    #     'root': { 'level': 'WARNING', 'handlers': ['console','file'] }
+    #     })
+    logger = logging.getLogger("main.py")
     app.run(host='0.0.0.0',port=5000, debug=True) # Con autorefresco
     # app.run(host='0.0.0.0',port=5000)
+
+    logger.debug("""
+    *** SUPERAPP ***
+    *** Ejecutando main.py ***
+    """)
+    logger.debug(f"** {__version__} **")
+

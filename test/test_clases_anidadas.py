@@ -5,12 +5,12 @@ Programa para testear el modulo "tools_sqlite3.py"
 
 """
 
-from utilidades_extra import tools_sqlite3 as tool
+from ..utilidades_extra import tools_sqlite3 as tool
 from datetime import date,datetime
 
 
 
-bbdd_file = "bbdd_de_pruebas.db"
+bbdd_file = "bbdd_piezas.db"
 
 with tool.basedatos(bbdd_file) as bbdd:
     print(">>>> Tablas de la bbdd:",bbdd.tablas)
