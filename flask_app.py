@@ -1,22 +1,10 @@
 #!/usr/bin/python3
 
 """ 
-**********************************************************************
-!!!!!!!!!!!! VERSION SIN SQLALCHEMY   !!!!!!!!!!!!!!
-**********************************************************************
-================================================================================
 
 Pagina web dinamica con flask que muestra una base de datos de productos de
 supermercado. Se pueden borrar, editar y añadir nuevos productos
 
-Para iniciar la base de datos:
-    desde la consola python:
-    from app.py import db
-    db.create_all()
-
-V2: Modificada para usar SQLAlchemy
-V3: Modificada para tener bbdd de productos, de compras, ...
-V4: Modificada para NO usar SQLAlchemy
 
 #######################################################################
 #                                TODO                                 #
@@ -30,7 +18,6 @@ V4: Modificada para NO usar SQLAlchemy
 - Cuando haces una compra volver a pagina productos
 - en lista_compras.html y lista_productos.html añadir boton para volver al principio de la pagina
 - Boton subir para ir al inicio de pagina
-- Lector de codigo de barras
 - Boton de editar compra en la pagina de producto
 - Ordenar lista_productos en modo descendente por id, de modo que los productos recien añadidos a la bbdd salgan primero
 
@@ -52,9 +39,16 @@ from utilidades_extra import carga_codigobarras as carga_codebar
 
 from logging.config import dictConfig
 
-DB_FILE = "./basedatos.db"
-UPLOAD_FOLDER = './static/images/'
+app = Flask(__name__)
+app.config['SECRET_KEY']='abcde'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basedatos.db'
+
+DB_FILE = os.path.join(app.root_path,"basedatos.db")
+UPLOAD_FOLDER = os.path.join(app.root_path,"static/images/")
+LOG_FILE = os.path.join(app.root_path,"logs/superapp.log")
 ALLOWED_EXTENSIONS = {'jpg','txt'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 supermercado_defecto = 2
 #db = SQLAlchemy(app)
@@ -141,9 +135,8 @@ class Edit_Compra_Form(FlaskForm):
 
 @app.route('/')
 def index():
-    logger.info("Hola desde index")
+    logger.info(f"Hola desde index. Directorio app: {app.root_path}")
     return render_template('index.html',version=__version__) 
-
 # Ver la lista de productos
 # TODO: Pasar tambien el precio del producto:  <24-02-23, yourname> #
 @app.route('/lista_productos',methods=['GET','POST'])
@@ -207,9 +200,9 @@ def compras():
             name = "%" + name + "%"
             print("Tengo",name)
             #dato2 = Compra.query.join(Producto).filter(Producto.name.like(name)).all()
-            datos2 = bbdd.tbl_compra.get_producto(name,"name")
-            if dato2:
-                return render_template('lista_compras.html',datos=dato2) 
+            datos2 = bbdd.vista_compra.get_producto(name,"producto")
+            if datos2:
+                return render_template('lista_compras.html',datos=datos2) 
             else:
                 print("NO HAY DATOS")
 
@@ -553,7 +546,7 @@ def about():
 
 
 if __name__=='__main__':
-    logging.basicConfig(filename='./logs/superapp.log',
+    logging.basicConfig(filename=LOG_FILE,
             filemode='w',
             format='%(name)s - %(levelname)s - %(message)s',
             level=logging.INFO)
